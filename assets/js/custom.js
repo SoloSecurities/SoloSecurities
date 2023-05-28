@@ -75,8 +75,10 @@
       $('html, body').animate({
         scrollTop: (target.offset().top) + 1
       }, 700, function() {
-        // Update the URL with the section anchor
+        // Update the URL with the section anchor if the target is not empty
+        if (target.selector) {
         window.location.hash = target.selector;
+        }
       });
  
       // Update menu item active state
