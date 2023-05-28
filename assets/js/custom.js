@@ -41,48 +41,62 @@
 
 
   // Menu elevator animation
-  $('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function() {
-    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-      var target = $(this.hash);
-      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-      if (target.length) {
-        var width = $(window).width();
-        if(width < 991) {
-          $('.menu-trigger').removeClass('active');
-          $('.header-area .nav').slideUp(200);  
-        }       
-        $('html,body').animate({
-          scrollTop: (target.offset().top) + 1
-        }, 700);
-        return false;
+  $('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function(e) {
+    e.preventDefault();
+  
+    var target = $(this.hash);
+    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+  
+    if (target.length) {
+      var width = $(window).width();
+      if (width < 991) {
+        $('.menu-trigger').removeClass('active');
+        $('.header-area .nav').slideUp(200);
       }
+  
+      var hash = this.href.split("#")[1]; // Extract the hash value from the href attribute
+  
+      $('html, body').animate({
+        scrollTop: (target.offset().top) + 1
+      }, 500, function() {
+        // Update the URL with the section anchor
+        window.location.hash = hash;
+      });
+  
+      // Update menu item active state
+      $('.scroll-to-section a').removeClass('active');
+      $(this).addClass('active');
     }
   });
-
-  $(document).ready(function () {
-      $(document).on("scroll", onScroll);
-      
-      //smoothscroll
-      $('.scroll-to-section a[href^="#"]').on('click', function (e) {
-          e.preventDefault();
-          $(document).off("scroll");
-          
-          $('.scroll-to-section a').each(function () {
-              $(this).removeClass('active');
-          })
-          $(this).addClass('active');
-        
-          var target = this.hash,
-          menu = target;
-          var target = $(this.hash);
-          $('html, body').stop().animate({
-              scrollTop: (target.offset().top) + 1
-          }, 500, 'swing', function () {
-              window.location.hash = target;
-              $(document).on("scroll", onScroll);
-          });
+  
+  $(document).ready(function() {
+    $(document).on("scroll", onScroll);
+  
+    // Smooth scroll
+    $('.scroll-to-section a[href^="#"]').on('click', function(e) {
+      e.preventDefault();
+      $(document).off("scroll");
+  
+      $('.scroll-to-section a').each(function() {
+        $(this).removeClass('active');
       });
+      $(this).addClass('active');
+  
+      var target = this.hash;
+      var targetElement = $(target);
+      if (targetElement.length) {
+        $('html, body').stop().animate({
+          scrollTop: (targetElement.offset().top) + 1
+        }, 500, 'swing', function() {
+          // Update the URL with the section anchor
+          window.location.hash = target;
+          $(document).on("scroll", onScroll);
+        });
+      }
+    });
   });
+
+
 
   function onScroll(event){
       var scrollPos = $(document).scrollTop();
