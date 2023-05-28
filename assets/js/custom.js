@@ -59,29 +59,30 @@
     }
   });
 
-  $(document).ready(function () {
-      $(document).on("scroll", onScroll);
-      
-      //smoothscroll
-      $('.scroll-to-section a[href^="#"]').on('click', function (e) {
-          e.preventDefault();
-          $(document).off("scroll");
-          
-          $('.scroll-to-section a').each(function () {
-              $(this).removeClass('active');
-          })
-          $(this).addClass('active');
-        
-          var target = this.hash,
-          menu = target;
-          var target = $(this.hash);
-          $('html, body').stop().animate({
-              scrollTop: (target.offset().top) + 1
-          }, 500, 'swing', function () {
-              window.location.hash = target.selector;
-              $(document).on("scroll", onScroll);
-          });
+  $('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function(e) {
+    e.preventDefault();
+ 
+    var target = $(this.hash);
+    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+ 
+   if (target.length) {
+    var width = $(window).width();
+      if (width < 991) {
+        $('.menu-trigger').removeClass('active');
+        $('.header-area .nav').slideUp(200);
+      }
+ 
+      $('html, body').animate({
+        scrollTop: (target.offset().top) + 1
+      }, 700, function() {
+        // Update the URL with the section anchor
+        window.location.hash = target.selector;
       });
+ 
+      // Update menu item active state
+      $('.scroll-to-section a').removeClass('active');
+      $(this).addClass('active');
+    }
   });
 
   function onScroll(event){
