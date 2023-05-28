@@ -60,31 +60,31 @@
   });
 
   $('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function(e) {
-    e.preventDefault();
- 
-    var target = $(this.hash);
-    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
- 
-   if (target.length) {
+  e.preventDefault();
+
+  var target = $(this.hash);
+  target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+
+  if (target.length) {
     var width = $(window).width();
-      if (width < 991) {
-        $('.menu-trigger').removeClass('active');
-        $('.header-area .nav').slideUp(200);
-      }
- 
-      $('html, body').animate({
-        scrollTop: (target.offset().top) + 1
-      }, 700, function() {
-        // Update the URL with the section anchor if the target is not empty
-        if (target.selector) {
-        window.location.hash = target.selector;
-        }
-      });
- 
-      // Update menu item active state
-      $('.scroll-to-section a').removeClass('active');
-      $(this).addClass('active');
+    if (width < 991) {
+      $('.menu-trigger').removeClass('active');
+      $('.header-area .nav').slideUp(200);
     }
+
+    var hash = this.href.split("#")[1]; // Extract the hash value from the href attribute
+
+    $('html, body').animate({
+      scrollTop: (target.offset().top) + 1
+    }, 700, function() {
+      // Update the URL with the section anchor
+      window.location.hash = hash;
+    });
+
+    // Update menu item active state
+    $('.scroll-to-section a').removeClass('active');
+    $(this).addClass('active');
+  }
   });
 
   function onScroll(event){
